@@ -90,15 +90,23 @@ public:
     void push(const T &data)
     {
         core_util_critical_section_enter();
+
+        //Copy _head and _tail to local variables to allow for optimization
+        CounterType tail = _tail
+        CounterType head = _head;
+        
         if (_full) {
-            _tail++;
-            _tail %= BufferSize;
+            tail++;
+            tail %= BufferSize;
+            _tail = tail;
         }
-        _pool[_head++] = data;
-        _head %= BufferSize;
-        if (_head == _tail) {
+        _pool[head++] = data;
+        head %= BufferSize;
+        if (head == tail) {
             _full = true;
         }
+        _head = head;
+
         core_util_critical_section_exit();
     }
 
@@ -110,10 +118,15 @@ public:
     bool pop(T &data)
     {
         bool data_popped = false;
+        CounterType tail;
         core_util_critical_section_enter();
+
         if (!empty()) {
-            data = _pool[_tail++];
-            _tail %= BufferSize;
+            //Copy _tail to local variable to allow for optimization
+            tail = _tail
+            data = _pool[tail++];
+            tail %= BufferSize;
+            _tail = tail;
             _full = false;
             data_popped = true;
         }
@@ -161,12 +174,15 @@ public:
     CounterType size() const
     {
         core_util_critical_section_enter();
+        //Copy _head and _tail to local variables to allow for optimization
+        CounterType tail = _tail
+        CounterType head = _head;
         CounterType elements;
         if (!_full) {
-            if (_head < _tail) {
-                elements = BufferSize + _head - _tail;
+            if (head < tail) {
+                elements = BufferSize + head - tail;
             } else {
-                elements = _head - _tail;
+                elements = head - tail;
             }
         } else {
             elements = BufferSize;
