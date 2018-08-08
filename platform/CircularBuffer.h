@@ -118,12 +118,14 @@ public:
     bool pop(T &data)
     {
         bool data_popped = false;
-        CounterType tail;
+        
         core_util_critical_section_enter();
 
-        if (!empty()) {
-            //Copy _tail to local variable to allow for optimization
-            tail = _tail
+        //Copy _head and _tail to local variables to allow for optimization
+        CounterType tail = _tail
+        CounterType head = _head;
+
+        if (_head != _tail || _full) {
             data = _pool[tail++];
             tail %= BufferSize;
             _tail = tail;
@@ -200,8 +202,10 @@ public:
     {
         bool data_updated = false;
         core_util_critical_section_enter();
-        if (!empty()) {
-            data = _pool[_tail];
+        //Copy _head to local variable to allow for optimization
+        CounterType tail = _tail
+        if (_head != tail || _full) {
+            data = _pool[tail];
             data_updated = true;
         }
         core_util_critical_section_exit();
