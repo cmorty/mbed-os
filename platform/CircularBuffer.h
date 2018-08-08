@@ -92,7 +92,7 @@ public:
         core_util_critical_section_enter();
 
         //Copy _head and _tail to local variables to allow for optimization
-        CounterType tail = _tail
+        CounterType tail = _tail;
         CounterType head = _head;
         
         if (_full) {
