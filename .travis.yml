@@ -96,7 +96,7 @@ matrix:
         # Coverage for tools
         - coveralls
         # Report success since we have overridden default behaviour
-        - bash -c "$STATUS" success "Local $NAME testing has passed"
+        - if [[ -n "$MBED_BOT" ]] ; then bash -c "$STATUS" success "Local $NAME testing has passed"; fi
 
 #    - <<: *tools-pytest
 #      env: NAME=tools-py3.5
@@ -143,7 +143,7 @@ matrix:
           then
               STATUSM="$STATUSM ($(python -c "print '%+d' % ($CURR-$PREV)") files)"
           fi
-        - bash -c "$STATUS" success "$STATUSM"
+        - if [[ -n "$MBED_BOT" ]] ; then bash -c "$STATUS" success "$STATUSM" ; fi
 
     - env:
         - NAME=events
