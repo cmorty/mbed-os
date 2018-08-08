@@ -122,7 +122,7 @@ public:
         core_util_critical_section_enter();
 
         //Copy _head and _tail to local variables to allow for optimization
-        CounterType tail = _tail
+        CounterType tail = _tail;
         CounterType head = _head;
 
         if (_head != _tail || _full) {
@@ -177,7 +177,7 @@ public:
     {
         core_util_critical_section_enter();
         //Copy _head and _tail to local variables to allow for optimization
-        CounterType tail = _tail
+        CounterType tail = _tail;
         CounterType head = _head;
         CounterType elements;
         if (!_full) {
@@ -203,7 +203,7 @@ public:
         bool data_updated = false;
         core_util_critical_section_enter();
         //Copy _head to local variable to allow for optimization
-        CounterType tail = _tail
+        CounterType tail = _tail;
         if (_head != tail || _full) {
             data = _pool[tail];
             data_updated = true;
