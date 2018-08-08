@@ -20,7 +20,7 @@ cache:
     - $HOME/gcc-arm-none-eabi-6-2017-q2-update
 
 before_install:
-  - bash -c "$STATUS" pending "Local $NAME testing is in progress"
+  - if [[ -n "$MBED_BOT" ]] ; then bash -c "$STATUS" pending "Local $NAME testing is in progress"
   # Make sure pipefail
   - set -o pipefail
   # Setup apt to cache
@@ -36,10 +36,10 @@ before_install:
   - travis_retry $(! sudo apt-get update 2>&1 |grep Failed)
 
 after_success:
-  - bash -c "$STATUS" success "Local $NAME testing has passed"
+  - if [[ -n "$MBED_BOT" ]] ; thenbash -c "$STATUS" success "Local $NAME testing has passed"
 
 after_failure:
-  - bash -c "$STATUS" failure "Local $NAME testing has failed"
+  - if [[ -n "$MBED_BOT" ]] ; thenbash -c "$STATUS" failure "Local $NAME testing has failed"
 
 matrix:
   include:
@@ -183,7 +183,7 @@ matrix:
           then
               STATUSM="$STATUSM ($(python -c "print '%+d' % ($CURR-$PREV)") cycles)"
           fi
-        - bash -c "$STATUS" success "$STATUSM"
+        - if [[ -n "$MBED_BOT" ]] ; then bash -c "$STATUS" success "$STATUSM"
 
     - env:
         - NAME=littlefs
@@ -255,7 +255,7 @@ matrix:
           then
               STATUSM="$STATUSM ($(python -c "print '%+.2f' % (100*($CURR-$PREV)/$PREV.0)")%)"
           fi
-        - bash -c "$STATUS" success "$STATUSM"
+        - if [[ -n "$MBED_BOT" ]] ; then bash -c "$STATUS" success "$STATUSM"
 
     - env:
         - NAME=gitattributestest
