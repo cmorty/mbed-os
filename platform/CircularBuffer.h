@@ -193,7 +193,7 @@ public:
     }
 
 private:
-    T _pool[BufferSize];
+    volatile T _pool[BufferSize];
     volatile CounterType _head;
     volatile CounterType _tail;
     volatile bool _full;
