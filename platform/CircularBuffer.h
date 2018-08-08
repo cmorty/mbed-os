@@ -90,7 +90,7 @@ public:
     void push(const T &data)
     {
         core_util_critical_section_enter();
-        if (full()) {
+        if (_full) {
             _tail++;
             _tail %= BufferSize;
         }
